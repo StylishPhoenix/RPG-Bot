@@ -3,11 +3,26 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { createPlayer } = require('../playerData');
 
 module.exports = {
-    data: new SlashCommandBuilder()
-        .setName('create-character')
-        .setDescription('Create a new character in the game')
-        .addStringOption(option => option.setName('name').setDescription('The name of your character').setRequired(true))
-        .addStringOption(option => option.setName('class').setDescription('The class of your character').setRequired(true).addChoice('Warrior', 'warrior').addChoice('Mage', 'mage').addChoice('Rogue', 'rogue')),
+  data: new SlashCommandBuilder()
+    .setName('create-character')
+    .setDescription('Create a new character for the game')
+    .addStringOption(option =>
+      option
+        .setName('name')
+        .setDescription('The name of your character')
+        .setRequired(true)
+    )
+    .addStringOption(option =>
+      option
+        .setName('class')
+        .setDescription('The class of your character')
+        .setRequired(true)
+        .addChoices([
+          ['Warrior', 'warrior'],
+          ['Mage', 'mage'],
+          ['Rogue', 'rogue'],
+        ])
+    ),
     async execute(interaction) {
         const name = interaction.options.getString('name');
         const characterClass = interaction.options.getString('class');

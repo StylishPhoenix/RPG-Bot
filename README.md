@@ -16,6 +16,7 @@ Install the required dependencies:
 
 ```
 cd discord-rpg-bot
+npm install sqlite3
 npm install
 ```
 

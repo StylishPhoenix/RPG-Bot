@@ -17,9 +17,11 @@ module.exports = {
         .setName('class')
         .setDescription('The class of your character')
         .setRequired(true)
-        .addChoice('Warrior', 'warrior')
-        .addChoice('Mage', 'mage')
-        .addChoice('Rogue', 'rogue')
+        .addChoices([
+          { name: 'Warrior', value: 'warrior' },
+          { name: 'Mage', value: 'mage' },
+          { name: 'Rogue', value: 'rogue' },
+        ])
     ),
     async execute(interaction) {
         const name = interaction.options.getString('name');

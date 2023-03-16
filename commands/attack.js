@@ -48,6 +48,7 @@ module.exports = {
             if (updateError) {
               console.error(updateError);
             }
+          });
         }
       }
 

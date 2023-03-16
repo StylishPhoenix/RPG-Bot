@@ -32,9 +32,9 @@ node index.js
 Usage
 Players can interact with the RPG bot using Discord's slash commands. Here are some example commands:
 
-'/create-character' Create a new character with a name and class
-'/attack' Attack a random enemy and engage in turn-based combat
-'/stats' View your character's stats, such as health, attack, and defense
+`/create-character` Create a new character with a name and class
+`/attack` Attack a random enemy and engage in turn-based combat
+`/stats` View your character's stats, such as health, attack, and defense
 Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 

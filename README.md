@@ -15,7 +15,7 @@ git clone https://github.com/StylishPhoenix/Rpg-bot.git
 Install the required dependencies:
 
 ```
-cd discord-rpg-bot
+cd rpg-bot
 npm install sqlite3
 npm install
 ```

@@ -9,7 +9,7 @@ Player progress saved in SQLite database
 # Installation
 Clone this repository or download the source code:
 ```
-git clone https://github.com/yourusername/discord-rpg-bot.git
+git clone https://github.com/StylishPhoenix/Rpg-bot.git
 ```
 
 Install the required dependencies:

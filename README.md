@@ -4,9 +4,13 @@ Discord RPG Bot is a simple role-playing game bot for Discord servers. Players c
 
 ## Features
 Character creation with different classes and stats
+
 Turn-based combat system
+
 Random enemy encounters
+
 Player progress saved in SQLite database
+
 # Installation
 Clone this repository or download the source code:
 ```

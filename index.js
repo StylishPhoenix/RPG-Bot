@@ -12,8 +12,12 @@ for (const file of commandFiles) {
     client.commands.set(command.data.name, command);
 }
 
-client.once('ready', () => {
-    console.log('Bot is ready!');
+client.on('ready', async () => {
+  console.log(`Logged in as ${client.user.tag}!`);
+
+  // Update slash commands on the Discord API
+  const commands = client.commands.map(({ data }) => data.toJSON());
+  await client.application.commands.set(commands);
 });
 
 client.on('interactionCreate', async interaction => {

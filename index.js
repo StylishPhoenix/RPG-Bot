@@ -1,6 +1,7 @@
 // index.js
 const { Client, Intents, Collection } = require('discord.js');
 const fs = require('fs');
+const { token } = require('./config.json');
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
@@ -35,4 +36,4 @@ client.on('interactionCreate', async interaction => {
     }
 });
 
-client.login('YOUR_BOT_TOKEN');
+client.login(token);

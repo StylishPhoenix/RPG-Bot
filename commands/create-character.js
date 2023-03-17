@@ -43,5 +43,7 @@ module.exports = {
             await interaction.reply(`You have created a new character named "${player.name}" with the class "${player.characterClass}".`);
           }
         });
-    },
+      }
+    });
+  },
 };

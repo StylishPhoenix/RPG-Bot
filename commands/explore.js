@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageActionRow, MessageButton } = require('discord.js');
 const { getRandomEnemy } = require('../game/enemies');
 const { getPlayerByUserId } = require('../playerData');
-const { attack } = require('./attack');
+const { attack } = require('./game/attack');
 
 const encounterChance = 0.3;
 

@@ -8,7 +8,7 @@ function createPlayer(userId, name, characterClass, callback) {
     case 'warrior':
       health = 100;
       attack = 15;
-      defense = 10;
+      defense = 15;
       break;
     case 'mage':
       health = 75;
@@ -17,8 +17,8 @@ function createPlayer(userId, name, characterClass, callback) {
       break;
     case 'rogue':
       health = 85;
-      attack = 10;
-      defense = 15;
+      attack = 15;
+      defense = 10;
       break;
     default:
       return callback(new Error('Invalid character class'));

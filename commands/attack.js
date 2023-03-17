@@ -8,13 +8,7 @@ function calculateDamage(attacker, defender) {
   return damage;
 }
 
-module.exports = {
-  data: new SlashCommandBuilder()
-    .setName('attack')
-    .setDescription('Attack a random enemy in the game'),
-  async execute(interaction) {
-    const userId = interaction.user.id;
-
+async function attack(userId, interaction) {
     getPlayerByUserId(userId, async (error, player) => {
       if (error || !player) {
         console.error(error);
@@ -54,5 +48,8 @@ module.exports = {
 
       await interaction.reply(message);
     });
-  },
+  }
+
+module.exports = {
+    attack,
 };

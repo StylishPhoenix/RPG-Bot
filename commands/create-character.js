@@ -34,7 +34,7 @@ module.exports = {
                 return interaction.reply({ content: 'There was an error while creating your character!', ephemeral: true });
             }
 
-            interaction.reply(`Character "${player.name}" created with class "${player.class}"!`);
+            interaction.reply(`Character "${player.name}" created with class "${player.characterClass}"!`);
         });
     },
 };

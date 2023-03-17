@@ -1,7 +1,7 @@
 // commands/attack.js
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { getRandomEnemy } = require('../game/enemies');
-const { getPlayerByUserId } = require('../playerData');
+const { getPlayerByUserId, updatePlayerHealth } = require('../playerData');
 
 function calculateDamage(attacker, defender) {
   const damage = Math.max(attacker.attack - defender.defense, 1);

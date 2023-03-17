@@ -28,13 +28,20 @@ module.exports = {
         const characterClass = interaction.options.getString('class');
         const userId = interaction.user.id;
 
-        createPlayer(userId, name, characterClass, (error, player) => {
-            if (error) {
-                console.error(error);
-                return interaction.reply({ content: 'There was an error while creating your character!', ephemeral: true });
-            }
-
-            interaction.reply(`Character "${player.name}" created with class "${player.characterClass}"!`);
+    getPlayerByUserId(userId, async (error, existingPlayer) => {
+      if (error) {
+        console.error(error);
+        await interaction.reply({ content: 'There was an error while checking for an existing character.', ephemeral: true });
+      } else if (existingPlayer) {
+        await interaction.reply({ content: 'You already have a character. You cannot create another one.', ephemeral: true });
+      } else {
+        createPlayer(userId, name, characterClass, async (createError, player) => {
+          if (createError) {
+            console.error(createError);
+            await interaction.reply({ content: 'There was an error while creating your character.', ephemeral: true });
+          } else {
+            await interaction.reply(`You have created a new character named "${player.name}" with the class "${player.characterClass}".`);
+          }
         });
     },
 };

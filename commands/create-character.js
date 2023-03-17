@@ -1,6 +1,6 @@
 // commands/create-character.js
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { createPlayer } = require('../playerData');
+const { createPlayer, getPlayerByUserId } = require('../playerData');
 
 module.exports = {
   data: new SlashCommandBuilder()

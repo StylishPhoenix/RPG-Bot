@@ -21,9 +21,12 @@ npm install sqlite3
 npm install
 ```
 
-Create a .env file in the project root directory and add your Discord bot token:
+Create a config.json file in the project root directory and add your Discord bot token:
 ```
-TOKEN=your_bot_token_here
+{
+  "token": "YOUR_BOT_TOKEN"
+}
+
 ```
 Start the bot:
 

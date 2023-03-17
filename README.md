@@ -2,7 +2,7 @@
 # Discord RPG Bot
 Discord RPG Bot is a simple role-playing game bot for Discord servers. Players can create characters, fight enemies, and gain experience to improve their characters' abilities. The bot uses Discord's slash commands for easy interaction and stores player data in an SQLite database.
 
-Features
+## Features
 Character creation with different classes and stats
 Turn-based combat system
 Random enemy encounters

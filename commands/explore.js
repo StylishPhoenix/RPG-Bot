@@ -20,7 +20,8 @@ module.exports = {
                 console.error(error);
                 return interaction.reply({ content: 'There was an error while retrieving your character!', ephemeral: true });
             }
-
+            await interaction.deferReply();
+            
             // Check if the player encounters an enemy
             if (Math.random() < encounterChance) {
                 const enemy = getRandomEnemy();

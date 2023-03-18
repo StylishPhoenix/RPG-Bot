@@ -59,7 +59,7 @@ module.exports = {
                 });
 
             } else {
-                await interaction.reply('You explored the dungeon but found nothing.');
+                await interaction.editReply('You explored the dungeon but found nothing.');
             }
         });
     }

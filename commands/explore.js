@@ -45,7 +45,7 @@ module.exports = {
                 collector.on('collect', async (i) => {
                     if (i.customId === 'fight') {
                         await i.deferUpdate();
-                        await attack(interaction, player, enemy);
+                        await attack(interaction, userId, player, enemy);
                     } else if (i.customId === 'run') {
                         await i.update({ content: `You ran away from the ${enemy.name}.`, components: [] });
                     }

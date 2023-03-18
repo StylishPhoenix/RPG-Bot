@@ -7,7 +7,7 @@ function calculateDamage(attacker, defender) {
   return damage;
 }
 
-async function attack(interaction, player, enemy) {
+async function attack(interaction, userId, player, enemy) {
   getPlayerByUserId(userId, async (error, player) => {
     if (error || !player) {
       console.error(error);

@@ -11,7 +11,7 @@ async function attack(interaction, userId, player, enemy) {
   getPlayerByUserId(userId, async (error, player) => {
     if (error || !player) {
       console.error(error);
-      return interaction.reply({ content: 'There was an error while retrieving your character!', ephemeral: true });
+      return interaction.editReply({ content: 'There was an error while retrieving your character!', ephemeral: true });
     }
 
     const enemy = getRandomEnemy();
@@ -59,7 +59,7 @@ async function attack(interaction, userId, player, enemy) {
       const fightEmoji = '⚔️';
       const runEmoji = '🏃';
 
-      const sentMessage = await interaction.reply({ content: `${message}\nReact with ${fightEmoji} to fight or ${runEmoji} to run.`, fetchReply: true });
+      const sentMessage = await interaction.editReply({ content: `${message}\nReact with ${fightEmoji} to fight or ${runEmoji} to run.`, fetchReply: true });
 
       await sentMessage.react(fightEmoji);
       await sentMessage.react(runEmoji);
@@ -84,9 +84,9 @@ async function attack(interaction, userId, player, enemy) {
       }
 
       if (playerHasRun) {
-        await interaction.reply('You successfully ran away from the battle.');
+        await interaction.editReply('You successfully ran away from the battle.');
         } else {
-        await interaction.reply(`Battle ended. Your health is now ${player.health}.`);
+        await interaction.editReply(`Battle ended. Your health is now ${player.health}.`);
       }
   });
 }

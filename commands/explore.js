@@ -46,6 +46,7 @@ module.exports = {
                 collector.on('collect', async (i) => {
                     if (i.customId === 'fight') {
                         await i.deferUpdate();
+                        controller.stop();
                         await attack(interaction, userId, player, enemy);
                     } else if (i.customId === 'run') {
                         await i.update({ content: `You ran away from the ${enemy.name}.`, components: [] });
@@ -54,6 +55,7 @@ module.exports = {
 
                 collector.on('end', (_, reason) => {
                     if (reason === 'time') {
+                        controller.stop();
                         interaction.editReply({ content: 'You took too long to decide. The enemy got away.', components: [] });
                     }
                 });

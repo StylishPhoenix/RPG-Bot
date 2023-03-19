@@ -1,4 +1,4 @@
-const { MessageCollector } = require('discord.js');
+const { MessageActionRow, MessageButton } = require('discord.js');
 const { getRandomEnemy } = require('../game/enemies');
 const { getPlayerByUserId, updatePlayerHealth } = require('../playerData');
 
@@ -17,6 +17,20 @@ async function attack(interaction, userId, player, enemy) {
     const enemy = getRandomEnemy();
     let isPlayerTurn = true;
     let playerHasRun = false;
+
+    const row = new MessageActionRow()
+      .addComponents(
+        new MessageButton()
+          .setCustomId('fight')
+          .setLabel('Fight')
+          .setStyle('PRIMARY'),
+        new MessageButton()
+          .setCustomId('run')
+          .setLabel('Run')
+          .setStyle('SECONDARY')
+      );
+
+    const filter = i => i.user.id === userId;
 
     while (player.health > 0 && enemy.health > 0 && !playerHasRun) {
       let message = '';
@@ -55,39 +69,27 @@ async function attack(interaction, userId, player, enemy) {
         }
       });
 
-      // Send the message and add fight and run reactions
-      const fightEmoji = '⚔️';
-      const runEmoji = '🏃';
+      // Send the message and add fight and run buttons
+      await interaction.editReply({ content: `${message}\nChoose to fight or run.`, components: [row], fetchReply: true });
 
-      const sentMessage = await interaction.editReply({ content: `${message}\nReact with ${fightEmoji} to fight or ${runEmoji} to run.`, fetchReply: true });
+      const collector = interaction.channel.createMessageComponentCollector({ filter, max: 1, time: 30000 });
 
-      await sentMessage.react(fightEmoji);
-      await sentMessage.react(runEmoji);
+      const collected = await new Promise((resolve) => collector.on('collect', (i) => resolve(i)));
 
-      // Create a ReactionCollector to listen for the player's reaction
-      const filter = (reaction, user) => {
-        return [fightEmoji, runEmoji].includes(reaction.emoji.name) && user.id === userId;
-      };
-
-      const collector = sentMessage.createReactionCollector({ filter, max: 1, time: 30000 });
-
-      // Wait for the player's reaction and check if they chose to run or fight
-      const collected = await new Promise((resolve) => collector.on('collect', (reaction) => resolve(reaction)));
-
-      if (collected.emoji.name === runEmoji) {
+      if (collected.customId === 'run') {
         playerHasRun = true;
         break;
       }
 
       // Remove player's reactions for the next iteration
-      sentMessage.reactions.removeAll().catch(error => console.error('Failed to clear reactions:', error));
-      }
+      collector.resetTimer();
+    }
 
-      if (playerHasRun) {
-        await interaction.editReply('You successfully ran away from the battle.');
-        } else {
-        await interaction.editReply(`Battle ended. Your health is now ${player.health}.`);
-      }
+    if (playerHasRun) {
+      await interaction.editReply('You successfully ran away from the battle.');
+    } else {
+      await interaction.editReply(`Battle ended. Your health is now ${player.health}.`);
+    }
   });
 }
 

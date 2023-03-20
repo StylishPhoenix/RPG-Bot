@@ -68,7 +68,9 @@ async function attack(interaction, userId, player, enemy) {
           console.error(updateError);
         }
       });
-
+      // Remove player's reactions for the next iteration
+      collector.resetTimer();
+      
       // Send the message and add fight and run buttons
       await interaction.editReply({ content: `${message}\nChoose to fight or run.`, components: [row], fetchReply: true });
 
@@ -81,8 +83,7 @@ async function attack(interaction, userId, player, enemy) {
         break;
       }
 
-      // Remove player's reactions for the next iteration
-      collector.resetTimer();
+
     }
 
     if (playerHasRun) {

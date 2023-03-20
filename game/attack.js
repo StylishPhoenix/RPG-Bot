@@ -71,7 +71,7 @@ async function attack(interaction, userId, player, enemy) {
 
       
       // Send the message and add fight and run buttons
-      await interaction.editReply({ content: `${message}\nChoose to fight or run.`, components: [row], fetchReply: true });
+      await interaction.editReply({ content: `${message}\nWhat do you do?`, components: [row], fetchReply: true });
 
       const collector = interaction.channel.createMessageComponentCollector({ filter, max: 1, time: 30000 });
 
@@ -83,7 +83,7 @@ async function attack(interaction, userId, player, enemy) {
       }
       // Remove player's reactions for the next iteration
       collector.resetTimer();
-
+      await interaction.editReply('test.');
     }
 
     if (playerHasRun) {

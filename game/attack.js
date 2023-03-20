@@ -49,7 +49,7 @@ async function attack(interaction, userId, player, enemy) {
         // Enemy attacks player
         const enemyDamage = calculateDamage(enemy, player);
         player.health -= enemyDamage;
-        message = `The enemy ${enemy.name} dealt ${enemyDamage} damage to you.`;
+        message += `The enemy ${enemy.name} dealt ${enemyDamage} damage to you.`;
 
         if (player.health <= 0) {
           message += `\nYou have been defeated by the enemy ${enemy.name}.`;

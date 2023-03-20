@@ -81,7 +81,8 @@ async function attack(interaction, userId, player, enemy) {
         playerHasRun = true;
         break;
       }
-
+      // Remove player's reactions for the next iteration
+      collector.stop();
     }
 
     if (playerHasRun) {
@@ -89,8 +90,7 @@ async function attack(interaction, userId, player, enemy) {
     } else {
       await interaction.editReply(`Battle ended. Your health is now ${player.health}.`);
     }
-      // Remove player's reactions for the next iteration
-      collector.stop();
+
   });
 }
 

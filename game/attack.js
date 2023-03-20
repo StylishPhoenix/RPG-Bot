@@ -82,7 +82,7 @@ async function attack(interaction, userId, player, enemy) {
         break;
       }
       // Remove player's reactions for the next iteration
-      collector.resetTimer();
+      collector.stop();
       await interaction.editReply('test.');
     }
 

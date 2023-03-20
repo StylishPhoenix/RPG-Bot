@@ -22,7 +22,7 @@ Install the required dependencies:
 ```
 cd rpg-bot
 npm install sqlite3
-npm install
+npm install discord.js@13
 ```
 
 Create a config.json file in the project root directory and add your Discord bot token:

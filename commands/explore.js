@@ -38,7 +38,7 @@ module.exports = {
                             .setStyle('SECONDARY')
                     );
 
-                await interaction.reply({ content: `You've encountered a ${enemy.name}! What will you do?`, components: [row], fetchReply: true });
+                await interaction.editReply({ content: `You've encountered a ${enemy.name}! What will you do?`, components: [row], fetchReply: true });
 
                 const filter = i => i.user.id === userId;
                 const collector = interaction.channel.createMessageComponentCollector({ filter, max: 1, time: 60000 });

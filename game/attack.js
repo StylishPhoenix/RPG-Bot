@@ -39,7 +39,7 @@ async function attack(interaction, userId, player, enemy) {
         // Player attacks enemy
         const playerDamage = calculateDamage(player, enemy);
         enemy.health -= playerDamage;
-        message = `You dealt ${playerDamage} damage to the enemy ${enemy.name}.`;
+        message += `You dealt ${playerDamage} damage to the enemy ${enemy.name}.`;
 
         if (enemy.health <= 0) {
           message += `\nYou defeated the enemy ${enemy.name}!`;
@@ -81,9 +81,7 @@ async function attack(interaction, userId, player, enemy) {
         playerHasRun = true;
         break;
       }
-      // Remove player's reactions for the next iteration
-      collector.stop();
-      await interaction.editReply('test.');
+
     }
 
     if (playerHasRun) {
@@ -91,6 +89,8 @@ async function attack(interaction, userId, player, enemy) {
     } else {
       await interaction.editReply(`Battle ended. Your health is now ${player.health}.`);
     }
+      // Remove player's reactions for the next iteration
+      collector.stop();
   });
 }
 

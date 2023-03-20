@@ -34,8 +34,7 @@ async function attack(interaction, userId, player, enemy) {
 
     while (player.health > 0 && enemy.health > 0 && !playerHasRun) {
       let message = '';
-
-      if (isPlayerTurn) {
+      
         // Player attacks enemy
         const playerDamage = calculateDamage(player, enemy);
         enemy.health -= playerDamage;
@@ -44,7 +43,6 @@ async function attack(interaction, userId, player, enemy) {
         if (enemy.health <= 0) {
           message += `\nYou defeated the enemy ${enemy.name}!`;
           break;
-        }
       } else {
         // Enemy attacks player
         const enemyDamage = calculateDamage(enemy, player);
@@ -58,9 +56,6 @@ async function attack(interaction, userId, player, enemy) {
           message += `\nYour health is now ${player.health}.`;
         }
       }
-
-      // Toggle player turn
-      isPlayerTurn = !isPlayerTurn;
 
       // Save player's updated health to the database
       updatePlayerHealth(userId, player.health, (updateError) => {

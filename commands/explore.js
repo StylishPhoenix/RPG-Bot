@@ -5,7 +5,7 @@ const { getRandomEnemy } = require('../game/enemies');
 const { getPlayerByUserId } = require('../playerData');
 const { attack } = require('../game/attack');
 
-const encounterChance = 0.3;
+const encounterChance = 1;
 
 module.exports = {
     data: new SlashCommandBuilder()

@@ -45,9 +45,15 @@ function createPlayer(userId, name, characterClass, callback) {
 }
 
 function getPlayerByUserId(userId, callback) {
+  if (!db) {
+    return callback(new Error('Database not initialized'));
+  }
   db.get(`SELECT * FROM players WHERE user_id = ?`, [userId], (err, row) => {
     if (err) {
       return callback(err);
+    }
+    if (!row) {
+      return callback(new Error(`Player with user ID ${userId} not found`));
     }
     callback(null, row);
   });

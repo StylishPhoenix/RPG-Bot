@@ -32,7 +32,7 @@ async function attack(interaction, userId, player, enemy) {
 
       
       // Send the message and add fight and run buttons
-      await interaction.editReply({ content: `${message}\nWhat do you do?`, components: [row], fetchReply: true });
+      await interaction.editReply({ content: `You've encountered a ${enemy.name}! What will you do?`, components: [row], fetchReply: true });
 
       const collector = interaction.channel.createMessageComponentCollector({ filter, max: 1, time: 30000 });
 
@@ -77,7 +77,7 @@ async function attack(interaction, userId, player, enemy) {
           message += `\nYour health is now ${player.health}.`;
         }
       }
-
+      await interaction.editReply('You successfully ran away from the battle.');
       // Save player's updated health to the database
       updatePlayerHealth(userId, player.health, (updateError) => {
         if (updateError) {

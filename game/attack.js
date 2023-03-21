@@ -38,9 +38,6 @@ async function attack(interaction, userId, player, enemy) {
 
       const collected = await new Promise((resolve) => collector.on('collect', (i) => resolve(i)));
 
-
-    }
-
     if (playerHasRun) {
       await interaction.editReply('You successfully ran away from the battle.');
     } else {

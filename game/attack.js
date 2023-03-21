@@ -55,6 +55,7 @@ async function attack(interaction, userId, player, enemy) {
 
         if (enemy.health <= 0) {
           message += `\nYou defeated the enemy ${enemy.name}!`;
+          await interaction.editReply('\n${message}');
           break;
       } else {
         // Enemy attacks player
@@ -67,12 +68,12 @@ async function attack(interaction, userId, player, enemy) {
           break;
         } else {
           message += `\nYour health is now ${player.health}.`;
+          await interaction.editReply('\n${message}');
         }
       }
 
       // Remove player's reactions for the next iteration
       collector.stop();
-      await interaction.editReply('\n${message}');
       // Save player's updated health to the database
       updatePlayerHealth(userId, player.health, (updateError) => {
         if (updateError) {

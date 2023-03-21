@@ -30,6 +30,27 @@ async function attack(interaction, userId, player, enemy) {
           .setStyle('SECONDARY')
       );
 
+      
+      // Send the message and add fight and run buttons
+      await interaction.editReply({ content: `${message}\nWhat do you do?`, components: [row], fetchReply: true });
+
+      const collector = interaction.channel.createMessageComponentCollector({ filter, max: 1, time: 30000 });
+
+      const collected = await new Promise((resolve) => collector.on('collect', (i) => resolve(i)));
+
+      if (collected.customId === 'run') {
+        playerHasRun = true;
+        break;
+      }
+      // Remove player's reactions for the next iteration
+      collector.stop();
+    }
+
+    if (playerHasRun) {
+      await interaction.editReply('You successfully ran away from the battle.');
+    } else {
+      await interaction.editReply(`Battle ended. Your health is now ${player.health}.`);
+    }
     const filter = i => i.user.id === userId;
 
     while (player.health > 0 && enemy.health > 0 && !playerHasRun) {
@@ -63,28 +84,6 @@ async function attack(interaction, userId, player, enemy) {
           console.error(updateError);
         }
       });
-
-      
-      // Send the message and add fight and run buttons
-      await interaction.editReply({ content: `${message}\nWhat do you do?`, components: [row], fetchReply: true });
-
-      const collector = interaction.channel.createMessageComponentCollector({ filter, max: 1, time: 30000 });
-
-      const collected = await new Promise((resolve) => collector.on('collect', (i) => resolve(i)));
-
-      if (collected.customId === 'run') {
-        playerHasRun = true;
-        break;
-      }
-      // Remove player's reactions for the next iteration
-      collector.stop();
-    }
-
-    if (playerHasRun) {
-      await interaction.editReply('You successfully ran away from the battle.');
-    } else {
-      await interaction.editReply(`Battle ended. Your health is now ${player.health}.`);
-    }
 
   });
 }

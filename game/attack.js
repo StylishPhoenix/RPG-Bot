@@ -41,17 +41,18 @@ async function attack(interaction, userId, player, enemy) {
 
     if (playerHasRun) {
       await interaction.editReply('You successfully ran away from the battle.');
-    } else {
-      await interaction.editReply(`Battle ended. Your health is now ${player.health}.`);
-    }
+    } 
 
     while (player.health > 0 && enemy.health > 0 && !playerHasRun) {
       let message = '';
-      
+         if (collected.customId === 'run') {
+            playerHasRun = true;
+            break;
+         }
         // Player attacks enemy
         const playerDamage = calculateDamage(player, enemy);
         enemy.health -= playerDamage;
-        message += `You dealt ${playerDamage} damage to the enemy ${enemy.name}.`;
+        message += `\nYou dealt ${playerDamage} damage to the enemy ${enemy.name}.`;
 
         if (enemy.health <= 0) {
           message += `\nYou defeated the enemy ${enemy.name}!`;
@@ -69,13 +70,10 @@ async function attack(interaction, userId, player, enemy) {
           message += `\nYour health is now ${player.health}.`;
         }
       }
-      if (collected.customId === 'run') {
-        playerHasRun = true;
-        break;
-      }
+
       // Remove player's reactions for the next iteration
       collector.stop();
-      await interaction.editReply('You successfully ran away from the battle.');
+      await interaction.editReply('\n${message}');
       // Save player's updated health to the database
       updatePlayerHealth(userId, player.health, (updateError) => {
         if (updateError) {

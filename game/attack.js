@@ -8,12 +8,13 @@ function calculateDamage(attacker, defender) {
 }
 
 async function attack(interaction, userId, player, enemy) {
+  try {
   getPlayerByUserId(userId, async (error, player) => {
     if (error || !player) {
       console.error(error);
       return interaction.editReply({ content: 'There was an error while retrieving your character!', ephemeral: true });
     }
-
+});
     const enemy = getRandomEnemy();
     let playerHasRun = false;
 
@@ -29,10 +30,9 @@ async function attack(interaction, userId, player, enemy) {
           .setStyle('SECONDARY')
       );
 
-      
-      // Send the message and add fight and run buttons
-      const filter = i => i.user.id === userId;
-      await interaction.editReply({ content: `You've encountered a ${enemy.name}! What will you do?`, components: [row], fetchReply: true });
+    // Send the message and add fight and run buttons
+    const filter = i => i.user.id === userId;
+    await interaction.editReply({ content: `You've encountered a ${enemy.name}! What will you do?`, components: [row], fetchReply: true });
 
     if (playerHasRun) {
       await interaction.editReply('You successfully ran away from the battle.');
@@ -40,21 +40,22 @@ async function attack(interaction, userId, player, enemy) {
 
     while (player.health > 0 && enemy.health > 0 && !playerHasRun) {
       let message = '';
-         const collector = interaction.channel.createMessageComponentCollector({ filter, max: 1, time: 30000 });
-         const collected = await new Promise((resolve) => collector.on('collect', (i) => resolve(i)));
-         if (collected.customId === 'run') {
-            playerHasRun = true;
-            break;
-         }
-        // Player attacks enemy
-        const playerDamage = calculateDamage(player, enemy);
-        enemy.health -= playerDamage;
-        message += `\nYou dealt ${playerDamage} damage to the enemy ${enemy.name}.`;
+      const collector = interaction.channel.createMessageComponentCollector({ filter, max: 1, time: 30000 });
+      const collected = await new Promise((resolve) => collector.on('collect', (i) => resolve(i)));
+      if (collected.customId === 'run') {
+        playerHasRun = true;
+        break;
+      }
 
-        if (enemy.health <= 0) {
-          message += `\nYou defeated the enemy ${enemy.name}!`;
-          await interaction.editReply('\n${message}');
-          break;
+      // Player attacks enemy
+      const playerDamage = calculateDamage(player, enemy);
+      enemy.health -= playerDamage;
+      message += `\nYou dealt ${playerDamage} damage to the enemy ${enemy.name}.`;
+
+      if (enemy.health <= 0) {
+        message += `\nYou defeated the enemy ${enemy.name}!`;
+        await interaction.editReply(`\n${message}`);
+        break;
       } else {
         // Enemy attacks player
         const enemyDamage = calculateDamage(enemy, player);
@@ -66,7 +67,7 @@ async function attack(interaction, userId, player, enemy) {
           break;
         } else {
           message += `\nYour health is now ${player.health}.`;
-          await interaction.editReply('\n${message}');
+          await interaction.editReply(`\n${message}`);
         }
       }
 
@@ -77,11 +78,13 @@ async function attack(interaction, userId, player, enemy) {
         if (updateError) {
           console.error(updateError);
         }
-      });
-
-  }
+  });
+}} catch (error) {
+console.error(error);
+return interaction.editReply({ content: 'There was an error while retrieving your character!', ephemeral: true });
+}
 }
 
 module.exports = {
-  attack,
+attack,
 };

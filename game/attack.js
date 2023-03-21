@@ -12,7 +12,7 @@ async function attack(interaction, userId, player, enemy) {
     if (error || !player) {
       console.error(error);
       return interaction.editReply({ content: 'There was an error while retrieving your character!', ephemeral: true });
-    }
+    });
 
     const enemy = getRandomEnemy();
     let playerHasRun = false;

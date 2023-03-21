@@ -83,7 +83,7 @@ async function attack(interaction, userId, player, enemy) {
         }
       });
 
-  });
+  }
 }
 
 module.exports = {

@@ -34,16 +34,14 @@ async function attack(interaction, userId, player, enemy) {
       const filter = i => i.user.id === userId;
       await interaction.editReply({ content: `You've encountered a ${enemy.name}! What will you do?`, components: [row], fetchReply: true });
 
-      const collector = interaction.channel.createMessageComponentCollector({ filter, max: 1, time: 30000 });
-
-      const collected = await new Promise((resolve) => collector.on('collect', (i) => resolve(i)));
-
     if (playerHasRun) {
       await interaction.editReply('You successfully ran away from the battle.');
     } 
 
     while (player.health > 0 && enemy.health > 0 && !playerHasRun) {
       let message = '';
+         const collector = interaction.channel.createMessageComponentCollector({ filter, max: 1, time: 30000 });
+         const collected = await new Promise((resolve) => collector.on('collect', (i) => resolve(i)));
          if (collected.customId === 'run') {
             playerHasRun = true;
             break;

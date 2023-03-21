@@ -38,12 +38,7 @@ async function attack(interaction, userId, player, enemy) {
 
       const collected = await new Promise((resolve) => collector.on('collect', (i) => resolve(i)));
 
-      if (collected.customId === 'run') {
-        playerHasRun = true;
-        break;
-      }
-      // Remove player's reactions for the next iteration
-      collector.stop();
+
     }
 
     if (playerHasRun) {
@@ -77,6 +72,12 @@ async function attack(interaction, userId, player, enemy) {
           message += `\nYour health is now ${player.health}.`;
         }
       }
+      if (collected.customId === 'run') {
+        playerHasRun = true;
+        break;
+      }
+      // Remove player's reactions for the next iteration
+      collector.stop();
       await interaction.editReply('You successfully ran away from the battle.');
       // Save player's updated health to the database
       updatePlayerHealth(userId, player.health, (updateError) => {

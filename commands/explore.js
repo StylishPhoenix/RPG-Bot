@@ -25,41 +25,7 @@ module.exports = {
             // Check if the player encounters an enemy
             if (Math.random() < encounterChance) {
                 const enemy = getRandomEnemy();
-
-                const row = new MessageActionRow()
-                    .addComponents(
-                        new MessageButton()
-                            .setCustomId('fight')
-                            .setLabel('Fight')
-                            .setStyle('PRIMARY'),
-                        new MessageButton()
-                            .setCustomId('run')
-                            .setLabel('Run')
-                            .setStyle('SECONDARY')
-                    );
-
-                await interaction.editReply({ content: `You've encountered a ${enemy.name}! What will you do?`, components: [row], fetchReply: true });
-
-                const filter = i => i.user.id === userId;
-                const collector = interaction.channel.createMessageComponentCollector({ filter, max: 1, time: 60000 });
-
-                collector.on('collect', async (i) => {
-                    if (i.customId === 'fight') {
-                        await i.deferUpdate();
-                        // Remove player's reactions for the next iteration
-                        collector.resetTimer();
-                        await attack(interaction, userId, player, enemy);
-                    } else if (i.customId === 'run') {
-                        await i.update({ content: `You ran away from the ${enemy.name}.`, components: [] });
-                    }
-                });
-
-                collector.on('end', (_, reason) => {
-                    if (reason === 'time') {
-                        // Remove player's reactions for the next iteration
-                        collector.resetTimer();
-                        interaction.editReply({ content: 'You took too long to decide. The enemy got away.', components: [] });
-                    }
+                await attack(interaction, userId, player, enemy);
                 });
 
             } else {

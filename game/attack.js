@@ -15,7 +15,6 @@ async function attack(interaction, userId, player, enemy) {
     }
 
     const enemy = getRandomEnemy();
-    let isPlayerTurn = true;
     let playerHasRun = false;
 
     const row = new MessageActionRow()

@@ -26,7 +26,7 @@ module.exports = {
             if (Math.random() < encounterChance) {
                 const enemy = getRandomEnemy();
                 await attack(interaction, userId, player, enemy);
-                });
+                }
 
             } else {
                 await interaction.editReply('You explored the dungeon but found nothing.');

@@ -26,15 +26,24 @@ async function attack(client, interaction, userId, player, enemy) {
     const filter = i => i.user.id === userId;
     await interaction.editReply({ content: `You've encountered a ${enemy.name}! What will you do?`, components: [row], fetchReply: true });
 
-    // Handle button click events
-    client.on('interactionCreate', async interaction => {
-      if (interaction.isButton() && interaction.user.id === userId && interaction.message.id === interaction.message.id) {
+	while (player.health > 0 && enemy.health > 0 && !playerHasRun) {
 	  let message = '';
-        if (interaction.customId === 'run') {
-          playerHasRun = true;
-          await interaction.followUp('You successfully ran away from the battle.');
-          await interaction.editReply({ components: [] });
-        } else if (interaction.customId === 'fight') {
+      const buttonInteraction = await new Promise(resolve => {
+        const filter = i => i.user.id === userId && i.isButton();
+
+        const collector = interaction.channel.createMessageComponentCollector({ filter, max: 1 });
+
+        collector.on('collect', i => {
+          resolve(i);
+          collector.stop();
+        });
+      });
+	  await buttonInteraction.deferUpdate();
+      if (buttonInteraction.customId === 'run') {
+        playerHasRun = true;
+        await buttonInteraction.reply('You successfully ran away from the battle.');
+        await interaction.editReply({ components: [] });
+      } else if (buttonInteraction.customId === 'fight') {
           // Player attacks enemy
           const playerDamage = calculateDamage(player, enemy);
           enemy.health -= playerDamage;
@@ -66,11 +75,10 @@ async function attack(client, interaction, userId, player, enemy) {
           updatePlayerHealth(userId, player.health, (updateError) => {
             if (updateError) {
               console.error(updateError);
-            }
-          });
+			}
+		  });
         }
       }
-    });
   } catch (error) {
     console.error(error);
     return interaction.editReply({ content: 'There was an error while retrieving your character!', ephemeral: true });

@@ -12,7 +12,7 @@ module.exports = {
         .setName('explore')
         .setDescription('Explore a dungeon and encounter enemies'),
 
-    async execute(interaction) {
+    async execute(client, interaction) {
         const userId = interaction.user.id;
 
         getPlayerByUserId(userId, async (error, player) => {
@@ -25,8 +25,8 @@ module.exports = {
             // Check if the player encounters an enemy
             if (Math.random() < encounterChance) {
                 const enemy = getRandomEnemy();
-                await attack(interaction, userId, player, enemy);
-                }else {
+                await attack(client, interaction, userId, player, enemy);
+              	}else {
                 await interaction.editReply('You explored the dungeon but found nothing.');
             }
         });

@@ -6,7 +6,7 @@ function calculateDamage(attacker, defender) {
   return damage;
 }
 
-async function attack(interaction, userId, player, enemy) {
+async function attack(client, interaction, userId, player, enemy) {
   try {
     let playerHasRun = false;
 
@@ -24,15 +24,16 @@ async function attack(interaction, userId, player, enemy) {
 
     // Send the message and add fight and run buttons
     const filter = i => i.user.id === userId;
-    const message = await interaction.editReply({ content: `You've encountered a ${enemy.name}! What will you do?`, components: [row], fetchReply: true });
+    await interaction.editReply({ content: `You've encountered a ${enemy.name}! What will you do?`, components: [row], fetchReply: true });
 
     // Handle button click events
     client.on('interactionCreate', async interaction => {
-      if (interaction.isButton() && interaction.user.id === userId && interaction.message.id === message.id) {
+      if (interaction.isButton() && interaction.user.id === userId && interaction.message.id === interaction.message.id) {
+	  let message = '';
         if (interaction.customId === 'run') {
           playerHasRun = true;
-          await interaction.reply('You successfully ran away from the battle.');
-          await message.edit({ components: [] });
+          await interaction.followUp('You successfully ran away from the battle.');
+          await interaction.editReply({ components: [] });
         } else if (interaction.customId === 'fight') {
           // Player attacks enemy
           const playerDamage = calculateDamage(player, enemy);
@@ -41,8 +42,8 @@ async function attack(interaction, userId, player, enemy) {
 
           if (enemy.health <= 0) {
             message += `\nYou defeated the enemy ${enemy.name}!`;
-            await interaction.reply(`\n${message}`);
-            await message.edit({ components: [] });
+            await interaction.followUp(`\n${message}`);
+            await interaction.editReply({ components: [] });
             return;
           } else {
             // Enemy attacks player
@@ -52,17 +53,15 @@ async function attack(interaction, userId, player, enemy) {
 
             if (player.health <= 0) {
               message += `\nYou have been defeated by the enemy ${enemy.name}.`;
-              await interaction.reply(`\n${message}`);
-              await message.edit({ components: [] });
+              await interaction.followUp(`\n${message}`);
+              await interaction.editReply({ components: [] });
               return;
             } else {
               message += `\nYour health is now ${player.health}.`;
-              await interaction.reply(`\n${message}`);
+              await interaction.editReply(`\n${message}`);
             }
           }
 
-          // Remove player's reactions for the next iteration
-          interaction.deferUpdate();
           // Save player's updated health to the database
           updatePlayerHealth(userId, player.health, (updateError) => {
             if (updateError) {

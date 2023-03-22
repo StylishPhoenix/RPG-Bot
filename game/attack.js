@@ -1,5 +1,4 @@
 const { MessageActionRow, MessageButton } = require('discord.js');
-const { getRandomEnemy } = require('../game/enemies');
 const { getPlayerByUserId, updatePlayerHealth } = require('../playerData');
 
 function calculateDamage(attacker, defender) {
@@ -7,15 +6,8 @@ function calculateDamage(attacker, defender) {
   return damage;
 }
 
-async function attack(interaction, userId, player, enemy) {
-  getPlayerByUserId(userId, async (error, player) => {
-    if (error || !player) {
-      console.error(error);
-      return interaction.editReply({ content: 'There was an error while retrieving your character!', ephemeral: true });
-    }
-
-    const enemy = getRandomEnemy();
-    let isPlayerTurn = true;
+async function attack(client, interaction, userId, player, enemy) {
+  try {
     let playerHasRun = false;
 
     const row = new MessageActionRow()
@@ -30,63 +22,67 @@ async function attack(interaction, userId, player, enemy) {
           .setStyle('SECONDARY')
       );
 
+    // Send the message and add fight and run buttons
     const filter = i => i.user.id === userId;
+    await interaction.editReply({ content: `You've encountered a ${enemy.name}! What will you do?`, components: [row], fetchReply: true });
 
-    while (player.health > 0 && enemy.health > 0 && !playerHasRun) {
-      let message = '';
-      
-        // Player attacks enemy
-        const playerDamage = calculateDamage(player, enemy);
-        enemy.health -= playerDamage;
-        message += `You dealt ${playerDamage} damage to the enemy ${enemy.name}.`;
+	while (player.health > 0 && enemy.health > 0 && !playerHasRun) {
+	  let message = '';
+      const buttonInteraction = await new Promise(resolve => {
+        const filter = i => i.user.id === userId && i.isButton();
 
-        if (enemy.health <= 0) {
-          message += `\nYou defeated the enemy ${enemy.name}!`;
-          break;
-      } else {
-        // Enemy attacks player
-        const enemyDamage = calculateDamage(enemy, player);
-        player.health -= enemyDamage;
-        message += `\nThe enemy ${enemy.name} dealt ${enemyDamage} damage to you.`;
+        const collector = interaction.channel.createMessageComponentCollector({ filter, max: 1 });
 
-        if (player.health <= 0) {
-          message += `\nYou have been defeated by the enemy ${enemy.name}.`;
-          break;
-        } else {
-          message += `\nYour health is now ${player.health}.`;
-        }
-      }
-
-      // Save player's updated health to the database
-      updatePlayerHealth(userId, player.health, (updateError) => {
-        if (updateError) {
-          console.error(updateError);
-        }
+        collector.on('collect', i => {
+          resolve(i);
+          collector.stop();
+        });
       });
-
-      
-      // Send the message and add fight and run buttons
-      await interaction.editReply({ content: `${message}\nWhat do you do?`, components: [row], fetchReply: true });
-
-      const collector = interaction.channel.createMessageComponentCollector({ filter, max: 1, time: 30000 });
-
-      const collected = await new Promise((resolve) => collector.on('collect', (i) => resolve(i)));
-
-      if (collected.customId === 'run') {
+	  await buttonInteraction.deferUpdate();
+      if (buttonInteraction.customId === 'run') {
         playerHasRun = true;
-        break;
+        await buttonInteraction.reply('You successfully ran away from the battle.');
+        await interaction.editReply({ components: [] });
+      } else if (buttonInteraction.customId === 'fight') {
+          // Player attacks enemy
+          const playerDamage = calculateDamage(player, enemy);
+          enemy.health -= playerDamage;
+          message += `\nYou dealt ${playerDamage} damage to the enemy ${enemy.name}.`;
+
+          if (enemy.health <= 0) {
+            message += `\nYou defeated the enemy ${enemy.name}!`;
+            await interaction.followUp(`\n${message}`);
+            await interaction.editReply({ components: [] });
+            return;
+          } else {
+            // Enemy attacks player
+            const enemyDamage = calculateDamage(enemy, player);
+            player.health -= enemyDamage;
+            message += `\nThe enemy ${enemy.name} dealt ${enemyDamage} damage to you.`;
+
+            if (player.health <= 0) {
+              message += `\nYou have been defeated by the enemy ${enemy.name}.`;
+              await interaction.followUp(`\n${message}`);
+              await interaction.editReply({ components: [] });
+              return;
+            } else {
+              message += `\nYour health is now ${player.health}.`;
+              await interaction.editReply(`\n${message}`);
+            }
+          }
+
+          // Save player's updated health to the database
+          updatePlayerHealth(userId, player.health, (updateError) => {
+            if (updateError) {
+              console.error(updateError);
+			}
+		  });
+        }
       }
-      // Remove player's reactions for the next iteration
-      collector.stop();
-    }
-
-    if (playerHasRun) {
-      await interaction.editReply('You successfully ran away from the battle.');
-    } else {
-      await interaction.editReply(`Battle ended. Your health is now ${player.health}.`);
-    }
-
-  });
+  } catch (error) {
+    console.error(error);
+    return interaction.editReply({ content: 'There was an error while retrieving your character!', ephemeral: true });
+  }
 }
 
 module.exports = {

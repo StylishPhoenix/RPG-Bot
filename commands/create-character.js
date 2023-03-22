@@ -23,16 +23,13 @@ module.exports = {
           { name: 'Rogue', value: 'rogue' },
         )
     ),
-    async execute(interaction) {
+    async execute(client, interaction) {
         const name = interaction.options.getString('name');
         const characterClass = interaction.options.getString('class');
         const userId = interaction.user.id;
 
     getPlayerByUserId(userId, async (error, existingPlayer) => {
-      if (error) {
-        console.error(error);
-        await interaction.reply({ content: 'There was an error while checking for an existing character.', ephemeral: true });
-      } else if (existingPlayer) {
+      if (existingPlayer) {
         await interaction.reply({ content: 'You already have a character. You cannot create another one.', ephemeral: true });
       } else {
         createPlayer(userId, name, characterClass, async (createError, player) => {

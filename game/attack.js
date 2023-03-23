@@ -64,7 +64,7 @@ async function attack(client, interaction, userId, player, enemy) {
               message += `\nYou have been defeated by the enemy ${enemy.name}.`;
               await interaction.followUp(`\n${message}`);
               await interaction.editReply({ components: [] });
-	      revive('123', (err) => {
+	      revive(userId, (err) => {
   		 if (err) {
    		   console.error(err);
 	 	} else {

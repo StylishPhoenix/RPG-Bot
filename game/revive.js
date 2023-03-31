@@ -7,6 +7,7 @@ async function revive(interaction, userId, player) {
   // Update player's health in the database
   updatePlayerHealth(userId, reviveHealth, (error) => {
     if (error) {
+      console.log('Player max health:', player.maxHealth);
       console.error(error);
       return interaction.editReply({ content: 'There was an error while reviving your character!', ephemeral: true });
     }

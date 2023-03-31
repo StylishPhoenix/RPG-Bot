@@ -26,7 +26,7 @@ function createPlayer(userId, name, characterClass, callback) {
 
   db.run(
     `INSERT INTO players (user_id, name, class, health, maxHealth, attack, defense) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    [userId, name, characterClass, health, attack, defense],
+    [userId, name, characterClass, health, maxHealth, attack, defense],
     function (err) {
       if (err) {
         return callback(err);

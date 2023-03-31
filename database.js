@@ -15,6 +15,7 @@ db.run(`CREATE TABLE IF NOT EXISTS players (
   name TEXT NOT NULL,
   class TEXT NOT NULL,
   health INTEGER NOT NULL,
+  maxHealth INTEGER NOT NULL,
   attack INTEGER NOT NULL,
   defense INTEGER NOT NULL
 )`);

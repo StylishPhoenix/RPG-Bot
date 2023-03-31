@@ -12,9 +12,6 @@ async function revive(interaction, userId, player) {
       return interaction.editReply({ content: 'There was an error while reviving your character!', ephemeral: true });
     }
   });
-
-  // Notify the player that they have been revived
-  await interaction.editReply(`You have been revived! Your health is now ${reviveHealth}.`);
 }
 
 module.exports = {

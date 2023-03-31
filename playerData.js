@@ -6,17 +6,17 @@ function createPlayer(userId, name, characterClass, callback) {
   let health, attack, defense;
   switch (characterClass) {
     case 'warrior':
-      health = 100;
+      health = maxHealth = 100;
       attack = 15;
       defense = 15;
       break;
     case 'mage':
-      health = 75;
+      health = maxHealth = 75;
       attack = 20;
       defense = 5;
       break;
     case 'rogue':
-      health = 85;
+      health = maxHealth = 85;
       attack = 15;
       defense = 10;
       break;
@@ -25,7 +25,7 @@ function createPlayer(userId, name, characterClass, callback) {
   }
 
   db.run(
-    `INSERT INTO players (user_id, name, class, health, attack, defense) VALUES (?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO players (user_id, name, class, health, maxHealth, attack, defense) VALUES (?, ?, ?, ?, ?, ?, ?)`,
     [userId, name, characterClass, health, attack, defense],
     function (err) {
       if (err) {
@@ -37,6 +37,7 @@ function createPlayer(userId, name, characterClass, callback) {
         name,
         characterClass,
         health,
+        maxHealth,
         attack,
         defense,
       });

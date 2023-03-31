@@ -62,14 +62,8 @@ async function attack(client, interaction, userId, player, enemy) {
 
             if (player.health <= 0) {
               message += `\nYou have been defeated by the enemy ${enemy.name}.`;
-              await interaction.followUp(`\n${message}`);
-              await interaction.editReply({ components: [] });
-	      revive(userId, (err) => {
-  		 if (err) {
-   		   console.error(err);
-	 	} else {
-   		   console.log('Player revived successfully');
-	  }
+              await interaction.editReply(message);
+              await revive(interaction, userId, player);
 });
               return;
             } else {
@@ -92,33 +86,7 @@ async function attack(client, interaction, userId, player, enemy) {
   }
 }
 
-function revive(userId, callback) {
-  getPlayerByUserId(userId, (err, player) => {
-    if (err) {
-      return callback(err);
-    }
-
-    let newHealth;
-    switch (player.characterClass) {
-      case 'warrior':
-        newHealth = 100;
-        break;
-      case 'mage':
-        newHealth = 75;
-        break;
-      case 'rogue':
-        newHealth = 85;
-        break;
-      default:
-        return callback(new Error('Invalid character class'));
-    }
-
-    updatePlayerHealth(userId, newHealth, callback);
-  });
-}
-
 
 module.exports = {
   attack,
-  revive,
 };

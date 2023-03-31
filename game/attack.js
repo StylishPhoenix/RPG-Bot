@@ -64,7 +64,7 @@ async function attack(client, interaction, userId, player, enemy) {
             if (player.health <= 0) {
               message += `\nYou have been defeated by the enemy ${enemy.name}.`;
               await revive(interaction, userId, player);
-	      message += `The gods look kindly upon you, and grant you another chance!  Your health is now ${player.health}.`;
+	      message += `\nThe gods look kindly upon you, and grant you another chance!  Your health is now ${player.health}.`;
 	      await interaction.editReply(`\n${message}`);
               return;
             } else {

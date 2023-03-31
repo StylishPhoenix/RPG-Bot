@@ -1,5 +1,6 @@
 const { MessageActionRow, MessageButton } = require('discord.js');
 const { getPlayerByUserId, updatePlayerHealth } = require('../playerData');
+const { revive } = require('./revive');
 
 function calculateDamage(attacker, defender) {
   const damage = Math.max(attacker.attack - defender.defense, 1);
